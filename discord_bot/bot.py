@@ -1,5 +1,6 @@
 import os
 import discord
+from discord.ext import commands
 
 def main():
   TOKEN = os.environ.get("DISCORD_TOKEN")
@@ -8,30 +9,30 @@ def main():
   intents = discord.Intents.default()
   intents.members = True
   intents.messages = True
-  client = discord.Client(intents=intents)
+  bot = commands.Bot(command_prefix='!',intents=intents)
 
-  @client.event
+  @bot.event
   async def on_ready():
-    guild = discord.utils.find(lambda g: g.name == GUILD, client.guilds)
+    guild = discord.utils.find(lambda g: g.name == GUILD, bot.guilds)
 
     print(
-        f'{client.user} is connected to the following guild:\n'
+        f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
 
-  @client.event
+  @bot.event
   async def on_member_join(member):
-    guild = discord.utils.find(lambda g: g.name == GUILD, client.guilds)
+    guild = discord.utils.find(lambda g: g.name == GUILD, bot.guilds)
 
     await member.create_dm()
     await member.dm_channel.send(
         f'Hi {member.name}, welcome to {guild.name}'
     )
 
-  @client.event
+  @bot.event
   async def on_message(message):
     # guard if message is written by the bot
-    if message.author.id == client.user.id:
+    if message.author.id == bot.user.id:
       return
 
     possible_greetings = ["hello", "hey", "hi"]
@@ -39,4 +40,4 @@ def main():
     if message.content in possible_greetings:
       await message.channel.send(f'Hey <@{message.author.id}>')
 
-  client.run(TOKEN)
+  bot.run(TOKEN)
