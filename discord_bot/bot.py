@@ -21,9 +21,11 @@ def main():
 
   @client.event
   async def on_member_join(member):
+    guild = discord.utils.find(lambda g: g.name == GUILD, client.guilds)
+
     await member.create_dm()
     await member.dm_channel.send(
-        f'Hi {member.name}, welcome to my Discord server!'
+        f'Hi {member.name}, welcome to {guild.name}'
     )
 
   @client.event
@@ -31,7 +33,7 @@ def main():
     # guard if message is written by the bot
     if message.author.id == client.user.id:
       return
-    
+
     possible_greetings = ["hello", "hey", "hi"]
 
     if message.content in possible_greetings:
