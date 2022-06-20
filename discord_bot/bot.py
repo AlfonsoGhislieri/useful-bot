@@ -7,6 +7,7 @@ def main():
 
   intents = discord.Intents.default()
   intents.members = True
+  intents.messages = True
   client = discord.Client(intents=intents)
 
   @client.event
@@ -24,5 +25,14 @@ def main():
     await member.dm_channel.send(
         f'Hi {member.name}, welcome to my Discord server!'
     )
+
+  @client.event
+  async def on_message(message):
+    # guard if message is written by the bot
+    if message.author == client.user:
+      return
+
+    if message.content == "hello":
+      await message.channel.send(f'Hey <@{message.author.id}>')
 
   client.run(TOKEN)
