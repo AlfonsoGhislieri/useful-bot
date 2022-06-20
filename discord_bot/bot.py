@@ -29,10 +29,12 @@ def main():
   @client.event
   async def on_message(message):
     # guard if message is written by the bot
-    if message.author == client.user:
+    if message.author.id == client.user.id:
       return
+    
+    possible_greetings = ["hello", "hey", "hi"]
 
-    if message.content == "hello":
+    if message.content in possible_greetings:
       await message.channel.send(f'Hey <@{message.author.id}>')
 
   client.run(TOKEN)
