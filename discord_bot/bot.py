@@ -10,6 +10,7 @@ def main():
   intents.members = True
   intents.messages = True
   bot = commands.Bot(command_prefix='!',intents=intents)
+  bot.remove_command('help')
 
   @bot.event
   async def on_ready():
@@ -39,5 +40,11 @@ def main():
 
     if message.content in possible_greetings:
       await message.channel.send(f'Hey <@{message.author.id}>')
+    await bot.process_commands(message)
+
+  @bot.command(name="help")
+  async def on_message(ctx):
+    response = "I am here to help!"
+    await ctx.send(response)
 
   bot.run(TOKEN)
