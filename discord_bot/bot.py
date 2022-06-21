@@ -50,14 +50,19 @@ def main():
   @bot.command(name='roll_dice', help='Simulates rolling dice.')
   async def roll(ctx, number_of_dice : int, number_of_sides : int): 
     max_dice = 100
+    min_sides = 2
 
     if number_of_dice > max_dice:
       await ctx.send(f'Maximum number of dice capped at {max_dice} dice!')
       return 
 
+    if number_of_sides < min_sides:
+      await ctx.send(f'Minimum number of sides must be {min_sides}!')
+      return 
+
     dice = [
         str(random.choice(range(1, number_of_sides + 1)))
-        for _ in range(number_of_dice)
+        for _ in range(abs(number_of_dice))
     ]
     await ctx.send(', '.join(dice))
 
