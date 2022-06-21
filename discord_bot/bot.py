@@ -1,4 +1,5 @@
 import os
+import random
 import discord
 from discord.ext import commands
 
@@ -10,7 +11,6 @@ def main():
   intents.members = True
   intents.messages = True
   bot = commands.Bot(command_prefix='!',intents=intents)
-  bot.remove_command('help')
 
   @bot.event
   async def on_ready():
@@ -42,9 +42,23 @@ def main():
       await message.channel.send(f'Hey <@{message.author.id}>')
     await bot.process_commands(message)
 
-  @bot.command(name="help")
+  @bot.command(name="helper", help='bot comes to your aid')
   async def on_message(ctx):
     response = "I am here to help!"
     await ctx.send(response)
+
+  @bot.command(name='roll_dice', help='Simulates rolling dice.')
+  async def roll(ctx, number_of_dice : int, number_of_sides : int): 
+    max_dice = 100
+
+    if number_of_dice > max_dice:
+      await ctx.send(f'Maximum number of dice capped at {max_dice} dice!')
+      return 
+
+    dice = [
+        str(random.choice(range(1, number_of_sides + 1)))
+        for _ in range(number_of_dice)
+    ]
+    await ctx.send(', '.join(dice))
 
   bot.run(TOKEN)
