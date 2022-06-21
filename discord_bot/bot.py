@@ -62,7 +62,7 @@ def main():
 
     dice = [
         str(random.choice(range(1, number_of_sides + 1)))
-        for _ in range(abs(number_of_dice))
+        for _ in range(number_of_dice)
     ]
     await ctx.send(', '.join(dice))
 
