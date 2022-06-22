@@ -6,7 +6,7 @@ import discord
 class Bot(commands.Bot):
 
   def __init__(self, command_prefix, intents):
-    commands.Bot.__init__(self, command_prefix=command_prefix, intents=intents)
+    super().__init__(command_prefix=command_prefix, intents=intents)
     self.active_guild = os.environ.get("DISCORD_GUILD")
     self.add_commands()
 
