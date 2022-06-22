@@ -53,12 +53,10 @@ def main():
     min_sides = 2
 
     if number_of_dice > max_dice:
-      await ctx.send(f'Maximum number of dice capped at {max_dice} dice!')
-      return 
+      return await ctx.send(f'Maximum number of dice capped at {max_dice} dice!')
 
     if number_of_sides < min_sides:
-      await ctx.send(f'Minimum number of sides must be {min_sides}!')
-      return 
+      return await ctx.send(f'Minimum number of sides must be {min_sides}!')
 
     dice = [
         str(random.choice(range(1, number_of_sides + 1)))
