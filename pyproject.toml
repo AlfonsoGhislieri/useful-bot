@@ -5,7 +5,7 @@ description = ""
 authors = ["Alfonso Ghislieri <alfonso.ghis@hotmail.fr>"]
 
 [tool.poetry.scripts]
-start = "discord_bot.bot:main"
+start = "discord_bot.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
