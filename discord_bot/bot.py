@@ -71,6 +71,7 @@ class Bot(commands.Bot):
                 "q": query,
                 "google_domain": "google.com",
                 "hl": "en",
+                "num": "10",
                 "tbm": "isch",
             }
             # search google api and get random image
