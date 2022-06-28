@@ -42,11 +42,20 @@ class Bot(commands.Bot):
         @self.command(name="add_role", help="Adds roles to user")
         async def add_role(ctx, role, member: discord.Member = None):
             member = member or ctx.message.author
-            role = discord.utils.get(ctx.guild.roles, name=role)
+            role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
             if role is None:
                 await ctx.send("Role does not exist")
 
             await member.add_roles(role)
+
+        @self.command(name="remove_role", help="Removes role from user")
+        async def remove_roll(ctx, role, member: discord.Member = None):
+            member = member or ctx.message.author
+            role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
+            if role is None:
+                await ctx.send("Role does not exist")
+
+            await member.remove_roles(role)
 
         @self.command(
             name="roll_dice",
