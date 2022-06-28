@@ -39,6 +39,15 @@ class Bot(commands.Bot):
             response = "I am here to help!"
             await ctx.send(response)
 
+        @self.command(name="add_role", help="Adds roles to user")
+        async def add_role(ctx, role, member: discord.Member = None):
+            member = member or ctx.message.author
+            role = discord.utils.get(ctx.guild.roles, name=role)
+            if role is None:
+                await ctx.send("Role does not exist")
+
+            await member.add_roles(role)
+
         @self.command(
             name="roll_dice",
             help="Simulates rolling dice, default is 1 d6. Number of sides (optional) Number of dice (optional) \n Eg: !roll_dice 16 2 (rolls 2 16 sided dice)",
