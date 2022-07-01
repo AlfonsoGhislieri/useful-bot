@@ -11,6 +11,12 @@ class Bot(commands.Bot):
         self.active_guild = os.environ.get("DISCORD_GUILD")
         self.add_commands()
 
+    def valid_role(self, role, ctx):
+        if role is None:
+            return False
+        else:
+            return True
+
     def find_guild(self):
         return discord.utils.get(self.guilds, name=self.active_guild)
 
@@ -46,10 +52,10 @@ class Bot(commands.Bot):
         async def add_role(ctx, role, member: discord.Member = None):
             member = member or ctx.message.author
             admin = discord.utils.get(ctx.guild.roles, name="Admin")
+            role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
             if member == ctx.guild.owner or admin in member.roles:
-                role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
-                if role is None:
+                if not self.valid_role(role, ctx):
                     return await ctx.send("Role does not exist")
 
                 await member.add_roles(role)
@@ -59,10 +65,11 @@ class Bot(commands.Bot):
         @self.command(name="remove_role", help="Removes role from user")
         async def remove_roll(ctx, role, member: discord.Member = None):
             member = member or ctx.message.author
+            admin = discord.utils.get(ctx.guild.roles, name="Admin")
+            role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
             if member == ctx.guild.owner or admin in member.roles:
-                role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
-                if role is None:
+                if not self.valid_role(role=role, ctx=ctx):
                     return await ctx.send("Role does not exist")
 
                 await member.remove_roles(role)
