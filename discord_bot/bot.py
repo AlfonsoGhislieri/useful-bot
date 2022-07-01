@@ -11,18 +11,16 @@ class Bot(commands.Bot):
         self.active_guild = os.environ.get("DISCORD_GUILD")
         self.add_commands()
 
-    # def valid_role(self, member):
-
     def find_guild(self):
-        return discord.utils.find(lambda g: g.name == self.active_guild, self.guilds)
+        return discord.utils.get(self.guilds, name=self.active_guild)
 
     async def on_ready(self):
-        guild = discord.utils.get(self.guilds, name=self.active_guild)
+        guild = self.find_guild()
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
 
     async def on_member_join(self, member):
-        guild = discord.utils.find(lambda g: g.name == self.active_guild, self.guilds)
+        guild = self.find_guild()
 
         await member.create_dm()
         await member.dm_channel.send(f"Hi {member.name}, welcome to {guild.name}")
@@ -61,7 +59,6 @@ class Bot(commands.Bot):
         @self.command(name="remove_role", help="Removes role from user")
         async def remove_roll(ctx, role, member: discord.Member = None):
             member = member or ctx.message.author
-            admin = discord.utils.get(ctx.guild.roles, name="Admin")
 
             if member == ctx.guild.owner or admin in member.roles:
                 role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
