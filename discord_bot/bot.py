@@ -11,8 +11,13 @@ class Bot(commands.Bot):
         self.active_guild = os.environ.get("DISCORD_GUILD")
         self.add_commands()
 
+    # def valid_role(self, member):
+
+    def find_guild(self):
+        return discord.utils.find(lambda g: g.name == self.active_guild, self.guilds)
+
     async def on_ready(self):
-        guild = discord.utils.find(lambda g: g.name == self.active_guild, self.guilds)
+        guild = discord.utils.get(self.guilds, name=self.active_guild)
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
 
