@@ -11,7 +11,7 @@ class Bot(commands.Bot):
         self.active_guild = os.environ.get("DISCORD_GUILD")
         self.add_commands()
 
-    def valid_role(self, role, ctx):
+    def valid_role(self, role):
         if role is None:
             return False
         else:
@@ -19,6 +19,13 @@ class Bot(commands.Bot):
 
     def find_guild(self):
         return discord.utils.get(self.guilds, name=self.active_guild)
+
+    def valid_permissions(self, member, ctx):
+        admin = discord.utils.get(ctx.guild.roles, name="Admin")
+        if member == ctx.guild.owner or admin in member.roles:
+            return True
+        else:
+            return False
 
     async def on_ready(self):
         guild = self.find_guild()
@@ -51,30 +58,28 @@ class Bot(commands.Bot):
         @self.command(name="add_role", help="Adds roles to user")
         async def add_role(ctx, role, member: discord.Member = None):
             member = member or ctx.message.author
-            admin = discord.utils.get(ctx.guild.roles, name="Admin")
             role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
-            if member == ctx.guild.owner or admin in member.roles:
-                if not self.valid_role(role, ctx):
-                    return await ctx.send("Role does not exist")
+            if not self.valid_permissions(member, ctx):
+                return await ctx.send("Invalid permissions")
 
-                await member.add_roles(role)
-            else:
-                await ctx.send("Invalid permissions")
+            if not self.valid_role(role):
+                return await ctx.send("Role does not exist")
+
+            await member.add_roles(role)
 
         @self.command(name="remove_role", help="Removes role from user")
         async def remove_roll(ctx, role, member: discord.Member = None):
             member = member or ctx.message.author
-            admin = discord.utils.get(ctx.guild.roles, name="Admin")
             role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
-            if member == ctx.guild.owner or admin in member.roles:
-                if not self.valid_role(role=role, ctx=ctx):
-                    return await ctx.send("Role does not exist")
+            if not self.valid_permissions(member, ctx):
+                return await ctx.send("Invalid permissions")
 
-                await member.remove_roles(role)
-            else:
-                await ctx.send("Invalid permissions")
+            if not self.valid_role(role):
+                return await ctx.send("Role does not exist")
+
+            await member.remove_roles(role)
 
         @self.command(
             name="roll_dice",
