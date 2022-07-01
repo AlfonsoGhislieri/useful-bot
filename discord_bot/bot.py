@@ -47,7 +47,7 @@ class Bot(commands.Bot):
             if member == ctx.guild.owner or admin in member.roles:
                 role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
                 if role is None:
-                    await ctx.send("Role does not exist")
+                    return await ctx.send("Role does not exist")
 
                 await member.add_roles(role)
             else:
@@ -61,7 +61,7 @@ class Bot(commands.Bot):
             if member == ctx.guild.owner or admin in member.roles:
                 role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
                 if role is None:
-                    await ctx.send("Role does not exist")
+                    return await ctx.send("Role does not exist")
 
                 await member.remove_roles(role)
             else:
