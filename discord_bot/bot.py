@@ -39,8 +39,12 @@ class Bot(commands.Bot):
         guild = self.find_guild()
 
         # creates text-channel if it doesn't already exist
-        if not any(guild.name == self.select_role_channel_name for guild in guild.channels):
+        if not any(channel.name == self.select_role_channel_name for channel in guild.channels):
             await guild.create_text_channel(name=self.select_role_channel_name)
+
+            # find newly created channel and seed starting message
+            channel = next(x for x in guild.channels if x.name == self.select_role_channel_name)
+            await channel.send("Select your role!")
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
 
