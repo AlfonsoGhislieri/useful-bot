@@ -35,6 +35,28 @@ class Bot(commands.Bot):
         if not self.valid_role(role):
             return "Role does not exist"
 
+    def create_select_role_embed(self, emoji_dict):
+        embed_description = ""
+        for emoji in emoji_dict:
+            embed_description += f"{emoji} - {emoji_dict[emoji]}\n"
+
+        return discord.Embed(
+            title="React to this message to get your role",
+            description=embed_description,
+            color=discord.Color.green(),
+        )
+
+    async def send_select_role_message(self, guild):
+        # find newly created channel and seed starting message
+        channel = next(x for x in guild.channels if x.name == self.select_role_channel_name)
+
+        emoji_dict = {"Nerd": "🥸", "Snek": "🐍", "Gamer": "🕹"}
+        message = await channel.send(embed=self.create_select_role_embed(emoji_dict))
+
+        # add emoji reactions to message
+        for emoji in emoji_dict.values():
+            await message.add_reaction(emoji)
+
     async def on_ready(self):
         guild = self.find_guild()
         admin_role = discord.utils.get(guild.roles, name="Admin")
@@ -47,24 +69,7 @@ class Bot(commands.Bot):
             }
             await guild.create_text_channel(name=self.select_role_channel_name, overwrites=overwrites)
 
-            # find newly created channel and seed starting message
-            channel = next(x for x in guild.channels if x.name == self.select_role_channel_name)
-
-            emoji_dict = {"Nerd": "🥸", "Snek": "🐍", "Gamer": "🕹"}
-            embed_description = ""
-            for emoji in emoji_dict:
-                embed_description += f"{emoji} - {emoji_dict[emoji]}\n"
-
-            embed = discord.Embed(
-                title="React to this message to get your role",
-                description=embed_description,
-                color=discord.Color.green(),
-            )
-            message = await channel.send(embed=embed)
-
-            # add emoji reactions to message
-            for emoji in emoji_dict.values():
-                await message.add_reaction(emoji)
+            await self.send_select_role_message(guild)
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
 
