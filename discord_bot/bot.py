@@ -87,18 +87,12 @@ class Bot(commands.Bot):
 
     async def on_raw_reaction_add(self, payload):
         guild = discord.utils.get(self.guilds, id=payload.guild_id)
-        # member = discord.utils.get(guild.members, id=payload.user_id)
 
         if payload.channel_id == self.select_role_channel_id and payload.message_id == self.select_role_message_id:
-            if str(payload.emoji) == self.emoji_dict["Nerd"]:
-                role = discord.utils.get(payload.member.guild.roles, name="Nerd")
-                await payload.member.add_roles(role)
-            elif str(payload.emoji) == self.emoji_dict["Snek"]:
-                role = discord.utils.get(payload.member.guild.roles, name="Snek")
-                await payload.member.add_roles(role)
-            elif str(payload.emoji) == self.emoji_dict["Gamer"]:
-                role = discord.utils.get(payload.member.guild.roles, name="Gamer")
-                await payload.member.add_roles(role)
+            for key, value in self.emoji_dict.items():
+                if value == str(payload.emoji):
+                    role = discord.utils.get(payload.member.guild.roles, name=key)
+                    await payload.member.add_roles(role)
 
     async def on_member_join(self, member):
         guild = self.find_guild()
