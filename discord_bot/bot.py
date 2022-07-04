@@ -11,14 +11,14 @@ class Bot(commands.Bot):
         self.active_guild = os.environ.get("DISCORD_GUILD")
         self.add_commands()
 
+    def find_guild(self):
+        return discord.utils.get(self.guilds, name=self.active_guild)
+
     def valid_role(self, role):
         if role is None:
             return False
         else:
             return True
-
-    def find_guild(self):
-        return discord.utils.get(self.guilds, name=self.active_guild)
 
     def valid_permissions(self, ctx):
         admin = discord.utils.get(ctx.guild.roles, name="Admin")
@@ -26,6 +26,13 @@ class Bot(commands.Bot):
             return True
         else:
             return False
+
+    def check_invalid_role_assignment(self, ctx, role):
+        if not self.valid_permissions(ctx):
+            return "Invalid permissions"
+
+        if not self.valid_role(role):
+            return "Role does not exist"
 
     async def on_ready(self):
         guild = self.find_guild()
@@ -60,11 +67,9 @@ class Bot(commands.Bot):
             member = member or ctx.message.author
             role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
-            if not self.valid_permissions(ctx):
-                return await ctx.send("Invalid permissions")
-
-            if not self.valid_role(role):
-                return await ctx.send("Role does not exist")
+            invalid_role_assignment = self.check_invalid_role_assignment(ctx, role)
+            if invalid_role_assignment:
+                return await ctx.send(invalid_role_assignment)
 
             await member.add_roles(role)
 
@@ -73,11 +78,9 @@ class Bot(commands.Bot):
             member = member or ctx.message.author
             role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
-            if not self.valid_permissions(ctx):
-                return await ctx.send("Invalid permissions")
-
-            if not self.valid_role(role):
-                return await ctx.send("Role does not exist")
+            invalid_role_assignment = self.check_invalid_role_assignment(ctx, role)
+            if invalid_role_assignment:
+                return await ctx.send(invalid_role_assignment)
 
             await member.remove_roles(role)
 
