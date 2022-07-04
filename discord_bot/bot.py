@@ -49,14 +49,18 @@ class Bot(commands.Bot):
 
             # find newly created channel and seed starting message
             channel = next(x for x in guild.channels if x.name == self.select_role_channel_name)
+            emoji_dict = {"Nerd": "🥸", "Snek": "🐍", "Gamer": "🕹"}
+            embed_description = ""
+            for emoji in emoji_dict:
+                embed_description += emoji + " - " + emoji_dict[emoji] + "\n"
+
             embed = discord.Embed(
                 title="React to this message to get your role",
-                description="Click on the corresponding emojis:\n 🥸 - Nerd\n 🐍 - Snek\n 🕹 - Gamer",
+                description=embed_description,
                 color=discord.Color.green(),
             )
             message = await channel.send(embed=embed)
-            emojis = ["🥸", "🐍", "🕹"]
-            for emoji in emojis:
+            for emoji in emoji_dict.values():
                 await message.add_reaction(emoji)
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
