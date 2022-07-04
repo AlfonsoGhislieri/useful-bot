@@ -87,12 +87,23 @@ class Bot(commands.Bot):
 
     async def on_raw_reaction_add(self, payload):
         guild = discord.utils.get(self.guilds, id=payload.guild_id)
+        member = discord.utils.get(guild.members, id=payload.user_id)
 
         if payload.channel_id == self.select_role_channel_id and payload.message_id == self.select_role_message_id:
             for key, value in self.emoji_dict.items():
                 if value == str(payload.emoji):
-                    role = discord.utils.get(payload.member.guild.roles, name=key)
-                    await payload.member.add_roles(role)
+                    role = discord.utils.get(guild.roles, name=key)
+                    await member.add_roles(role)
+
+    async def on_raw_reaction_remove(self, payload):
+        guild = discord.utils.get(self.guilds, id=payload.guild_id)
+        member = discord.utils.get(guild.members, id=payload.user_id)
+
+        if payload.channel_id == self.select_role_channel_id and payload.message_id == self.select_role_message_id:
+            for key, value in self.emoji_dict.items():
+                if value == str(payload.emoji):
+                    role = discord.utils.get(guild.roles, name=key)
+                    await member.remove_roles(role)
 
     async def on_member_join(self, member):
         guild = self.find_guild()
