@@ -61,11 +61,8 @@ class Bot(commands.Bot):
             await message.add_reaction(emoji)
 
     async def create_select_role_channel(self, guild):
-        admin_role = discord.utils.get(guild.roles, name="Admin")
-        overwrites = {
-            guild.default_role: discord.PermissionOverwrite(read_messages=False),
-            admin_role: discord.PermissionOverwrite(read_messages=True),
-        }
+        overwrites = {guild.default_role: discord.PermissionOverwrite(send_messages=False, add_reactions=False)}
+
         channel = await guild.create_text_channel(name=self.select_role_channel_name, overwrites=overwrites)
         self.select_role_channel_id = channel.id
 
