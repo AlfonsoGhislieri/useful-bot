@@ -20,9 +20,9 @@ class Bot(commands.Bot):
     def find_guild(self):
         return discord.utils.get(self.guilds, name=self.active_guild)
 
-    def valid_permissions(self, member, ctx):
+    def valid_permissions(self, ctx):
         admin = discord.utils.get(ctx.guild.roles, name="Admin")
-        if member == ctx.guild.owner or admin in member.roles:
+        if ctx.message.author == ctx.guild.owner or admin in ctx.message.author.roles:
             return True
         else:
             return False
@@ -60,7 +60,7 @@ class Bot(commands.Bot):
             member = member or ctx.message.author
             role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
-            if not self.valid_permissions(member, ctx):
+            if not self.valid_permissions(ctx):
                 return await ctx.send("Invalid permissions")
 
             if not self.valid_role(role):
@@ -73,7 +73,7 @@ class Bot(commands.Bot):
             member = member or ctx.message.author
             role = discord.utils.get(ctx.guild.roles, name=role.capitalize())
 
-            if not self.valid_permissions(member, ctx):
+            if not self.valid_permissions(ctx):
                 return await ctx.send("Invalid permissions")
 
             if not self.valid_role(role):
