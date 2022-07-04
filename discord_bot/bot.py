@@ -57,18 +57,20 @@ class Bot(commands.Bot):
         for emoji in emoji_dict.values():
             await message.add_reaction(emoji)
 
+    async def create_select_role_channel(self, guild):
+        admin_role = discord.utils.get(guild.roles, name="Admin")
+        overwrites = {
+            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            admin_role: discord.PermissionOverwrite(read_messages=True),
+        }
+        await guild.create_text_channel(name=self.select_role_channel_name, overwrites=overwrites)
+
     async def on_ready(self):
         guild = self.find_guild()
-        admin_role = discord.utils.get(guild.roles, name="Admin")
 
         # creates text-channel if it doesn't already exist
         if not any(channel.name == self.select_role_channel_name for channel in guild.channels):
-            overwrites = {
-                guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                admin_role: discord.PermissionOverwrite(read_messages=True),
-            }
-            await guild.create_text_channel(name=self.select_role_channel_name, overwrites=overwrites)
-
+            await self.create_select_role_channel(guild)
             await self.send_select_role_message(guild)
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
