@@ -9,6 +9,7 @@ class Bot(commands.Bot):
     def __init__(self, command_prefix, intents):
         super().__init__(command_prefix=command_prefix, intents=intents)
         self.active_guild = os.environ.get("DISCORD_GUILD")
+        self.select_role_channel_name = "select-role"
         self.add_commands()
 
     def find_guild(self):
@@ -36,6 +37,10 @@ class Bot(commands.Bot):
 
     async def on_ready(self):
         guild = self.find_guild()
+
+        # creates text-channel if it doesn't already exist
+        if not any(guild.name == self.select_role_channel_name for guild in guild.channels):
+            await guild.create_text_channel(name=self.select_role_channel_name)
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
 
