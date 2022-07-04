@@ -50,7 +50,9 @@ class Bot(commands.Bot):
             # find newly created channel and seed starting message
             channel = next(x for x in guild.channels if x.name == self.select_role_channel_name)
             message = await channel.send("Select your role!")
-            await message.add_reaction("🥸")
+            emojis = ["🥸", "🐍", "🕹"]
+            for emoji in emojis:
+                await message.add_reaction(emoji)
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
 
