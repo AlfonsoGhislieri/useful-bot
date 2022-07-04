@@ -10,9 +10,10 @@ class Bot(commands.Bot):
         super().__init__(command_prefix=command_prefix, intents=intents)
         self.active_guild = os.environ.get("DISCORD_GUILD")
         self.select_role_channel_name = "select-role"
-        self.add_commands()
+        self.emoji_dict = {"Nerd": "🥸", "Snek": "🐍", "Gamer": "🕹"}
         self.select_role_channel_id = None
         self.select_role_message_id = None
+        self.add_commands()
 
     def find_guild(self):
         return discord.utils.get(self.guilds, name=self.active_guild)
@@ -37,10 +38,10 @@ class Bot(commands.Bot):
         if not self.valid_role(role):
             return "Role does not exist"
 
-    def create_select_role_embed(self, emoji_dict):
+    def create_select_role_embed(self):
         embed_description = ""
-        for emoji in emoji_dict:
-            embed_description += f"{emoji} - {emoji_dict[emoji]}\n"
+        for emoji in self.emoji_dict:
+            embed_description += f"{emoji} - {self.emoji_dict[emoji]}\n"
 
         return discord.Embed(
             title="React to this message to get your role",
@@ -52,12 +53,11 @@ class Bot(commands.Bot):
         # find newly created channel and seed starting message
         channel = next(x for x in guild.channels if x.name == self.select_role_channel_name)
 
-        emoji_dict = {"Nerd": "🥸", "Snek": "🐍", "Gamer": "🕹"}
-        message = await channel.send(embed=self.create_select_role_embed(emoji_dict))
+        message = await channel.send(embed=self.create_select_role_embed())
         self.select_role_message_id = message.id
 
         # add emoji reactions to message
-        for emoji in emoji_dict.values():
+        for emoji in self.emoji_dict.values():
             await message.add_reaction(emoji)
 
     async def create_select_role_channel(self, guild):
@@ -87,10 +87,18 @@ class Bot(commands.Bot):
 
     async def on_raw_reaction_add(self, payload):
         guild = discord.utils.get(self.guilds, id=payload.guild_id)
-        member = discord.utils.get(guild.members, id=payload.user_id)
+        # member = discord.utils.get(guild.members, id=payload.user_id)
 
         if payload.channel_id == self.select_role_channel_id and payload.message_id == self.select_role_message_id:
-            print("Valid emoji reaction")
+            if str(payload.emoji) == self.emoji_dict["Nerd"]:
+                role = discord.utils.get(payload.member.guild.roles, name="Nerd")
+                await payload.member.add_roles(role)
+            elif str(payload.emoji) == self.emoji_dict["Snek"]:
+                role = discord.utils.get(payload.member.guild.roles, name="Snek")
+                await payload.member.add_roles(role)
+            elif str(payload.emoji) == self.emoji_dict["Gamer"]:
+                role = discord.utils.get(payload.member.guild.roles, name="Gamer")
+                await payload.member.add_roles(role)
 
     async def on_member_join(self, member):
         guild = self.find_guild()
