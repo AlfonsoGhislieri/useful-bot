@@ -37,14 +37,20 @@ class Bot(commands.Bot):
 
     async def on_ready(self):
         guild = self.find_guild()
+        admin_role = discord.utils.get(guild.roles, name="Admin")
 
         # creates text-channel if it doesn't already exist
         if not any(channel.name == self.select_role_channel_name for channel in guild.channels):
-            await guild.create_text_channel(name=self.select_role_channel_name)
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                admin_role: discord.PermissionOverwrite(read_messages=True),
+            }
+            await guild.create_text_channel(name=self.select_role_channel_name, overwrites=overwrites)
 
             # find newly created channel and seed starting message
             channel = next(x for x in guild.channels if x.name == self.select_role_channel_name)
-            await channel.send("Select your role!")
+            message = await channel.send("Select your role!")
+            await message.add_reaction("🥸")
 
         print(f"{self.user} is connected to the following guild:\n" f"{guild.name}(id: {guild.id})")
 
