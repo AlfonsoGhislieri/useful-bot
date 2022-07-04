@@ -68,7 +68,7 @@ class Bot(commands.Bot):
     async def on_ready(self):
         guild = self.find_guild()
 
-        # creates text-channel if it doesn't already exist
+        # checks if select-role channel already exists
         if not any(channel.name == self.select_role_channel_name for channel in guild.channels):
             await self.create_select_role_channel(guild)
             await self.send_select_role_message(guild)
