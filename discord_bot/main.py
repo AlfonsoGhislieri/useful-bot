@@ -12,5 +12,6 @@ def main():
     bot = Bot(command_prefix="!", intents=intents)
     bot.load_extension("discord_bot.cogs.roles")
     bot.load_extension("discord_bot.cogs.chance")
+    bot.load_extension("discord_bot.cogs.media")
 
     bot.run(TOKEN)
