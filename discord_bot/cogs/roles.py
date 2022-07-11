@@ -6,13 +6,13 @@ class Roles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def valid_role(role):
+    def valid_role(self, role):
         if role is None:
             return False
         else:
             return True
 
-    def valid_permissions(ctx):
+    def valid_permissions(self, ctx):
         admin = discord.utils.get(ctx.guild.roles, name="Admin")
         if ctx.message.author == ctx.guild.owner or admin in ctx.message.author.roles:
             return True
