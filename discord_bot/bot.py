@@ -33,9 +33,3 @@ class Bot(commands.Bot):
         if message.content.lower() in possible_greetings:
             await message.channel.send(f"{message.content.capitalize()} <@{message.author.id}>")
         await self.process_commands(message)
-
-    def add_commands(self):
-        @self.command(name="helper", help="bot comes to your aid")
-        async def on_message(ctx):
-            response = "I am here to help!"
-            await ctx.send(response)
