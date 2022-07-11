@@ -13,5 +13,6 @@ def main():
     bot.load_extension("discord_bot.cogs.roles")
     bot.load_extension("discord_bot.cogs.chance")
     bot.load_extension("discord_bot.cogs.media")
+    bot.load_extension("discord_bot.cogs.reactions")
 
     bot.run(TOKEN)
