@@ -10,4 +10,6 @@ def main():
     intents.messages = True
     intents.reactions = True
     bot = Bot(command_prefix="!", intents=intents)
+    bot.load_extension("discord_bot.cogs.roles")
+
     bot.run(TOKEN)
