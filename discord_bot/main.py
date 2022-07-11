@@ -10,9 +10,11 @@ def main():
     intents.messages = True
     intents.reactions = True
     bot = Bot(command_prefix="!", intents=intents)
-    bot.load_extension("discord_bot.cogs.roles")
-    bot.load_extension("discord_bot.cogs.chance")
-    bot.load_extension("discord_bot.cogs.media")
-    bot.load_extension("discord_bot.cogs.reactions")
+
+    for file in os.listdir("./discord_bot/cogs"):
+        if file.endswith("py"):
+            cog_name = file.split(".")[0]
+            bot.load_extension(f"discord_bot.cogs.{cog_name}")
+            print(f"loaded cog: {cog_name}")
 
     bot.run(TOKEN)
