@@ -5,10 +5,7 @@ from discord_bot.bot import Bot
 
 def main():
     TOKEN = os.environ.get("DISCORD_TOKEN")
-    intents = discord.Intents.default()
-    intents.members = True
-    intents.messages = True
-    intents.reactions = True
+    intents = discord.Intents().all()
     bot = Bot(command_prefix="!", intents=intents)
 
     for file in os.listdir("./discord_bot/cogs"):
