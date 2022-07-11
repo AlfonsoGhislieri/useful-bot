@@ -7,7 +7,6 @@ class Bot(commands.Bot):
     def __init__(self, command_prefix, intents):
         super().__init__(command_prefix=command_prefix, intents=intents)
         self.active_guild = os.environ.get("DISCORD_GUILD")
-        self.add_commands()
 
     def find_guild(self):
         return discord.utils.get(self.guilds, name=self.active_guild)
