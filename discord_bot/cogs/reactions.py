@@ -33,6 +33,7 @@ class Reactions(commands.Cog):
             await message.add_reaction(emoji)
 
     async def create_select_role_channel(self, guild):
+        # overwrites default permissions
         overwrites = {guild.default_role: discord.PermissionOverwrite(send_messages=False, add_reactions=False)}
 
         channel = await guild.create_text_channel(name=self.select_role_channel_name, overwrites=overwrites)
