@@ -1,1 +1,1 @@
-web: uvicorn discord_bot.main:main
+worker: python discord_bot/main.py
