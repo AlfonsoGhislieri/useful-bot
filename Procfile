@@ -1,1 +1,1 @@
-web: python start_script.py
+web: poetry run start
