@@ -1,1 +1,1 @@
-web: poetry run start
+web: poetry install
