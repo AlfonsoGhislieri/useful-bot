@@ -8,7 +8,7 @@ authors = ["Alfonso Ghislieri <alfonso.ghis@hotmail.fr>"]
 start = "discord_bot.main:main"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "3.9.13"
 discord = "^1.7.3"
 google-search-results = "^2.4.1"
 
