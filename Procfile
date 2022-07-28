@@ -1,1 +1,1 @@
-web: poetry run start
+web: python discord_bot/main.py
