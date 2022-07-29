@@ -1,12 +1,15 @@
 import os
 from discord.ext import commands
 import discord
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Bot(commands.Bot):
     def __init__(self, command_prefix, intents):
         super().__init__(command_prefix=command_prefix, intents=intents)
-        self.active_guild = os.environ.get("DISCORD_GUILD")
+        self.active_guild = os.getenv("DISCORD_GUILD")
 
     def find_guild(self):
         return discord.utils.get(self.guilds, name=self.active_guild)
