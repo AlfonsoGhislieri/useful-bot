@@ -1,5 +1,19 @@
 # Useful Bot
 
+## Test useful bot
+
+Useful bot is currently live and can be tested in action on the following discord server: [link to join server](https://discord.gg/Tb8A2XASWd).
+
+```
+# In order to show all available commands type:
+!help
+# Ps: Don't forget to include an ! before each command eg: !help, !roll_dice, !image ...
+```
+
+I plan to make the bot public in the future so that it can be hosted on other people's servers as well.
+
+## Features
+
 Useful bot is a discord bot that has aims to combine many useful features into a single bot, these include:
 
 - Personalised welcome direct message when users join the server.
@@ -10,4 +24,4 @@ Useful bot is a discord bot that has aims to combine many useful features into a
 - Manually assigning and unassigning roles, checking for user permissions and validity of roles.
 - Rolls dice, defaults to rolling 1d6 but also accepts multiple dice and different sided dice as optional parameters.
 - Flip a coin.
-- Responds to user greetings in chat.
+- Responds to user greetings in chat (hey, hello, hi)
